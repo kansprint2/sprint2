@@ -1,0 +1,61 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/stylesheets/vendor/flatpickr.min.css')
+    script(src='/javascripts/vendor/flatpickr.min.js')
+
+    main.container(role="main")
+        .container.theme-showcase
+            .page-header
+                h3 Create new sprint
+                .container
+                    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+                        ul.navbar-nav.mr-auto
+                            li.nav-item
+                                a.nav-link(href='/sprints')
+                                    i.fas.fa-chevron-left
+                                    |   Sprints
+                hr
+            div.main.container
+                .row
+                    if errorMessages !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-danger(role="alert")
+                                h4.alert-heading #{errorMessages}
+                                p Something went wrong. Please check if your form is correct - otherwise try later or contact application administrator.
+
+                    if success !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-success(role="alert")
+                                h4.alert-heading Success.
+                                p New sprint has been successfully added.
+
+                    div.col-md-9.col-md-offset-0.margin-center.margin-top20
+                        div.panel-body
+                            div
+                                form.well.form-horizontal(method='POST' action='/sprints')#sprint_form
+                                    div.panel-body
+                                        div.col-md-12.col-md-offset-0
+                                            div.form-group
+                                                label Date range
+                                                input.form-control#flatpickr-tryme(type='text' name="selected_date", placeholder="Start date to end date")
+                                            div.form-group
+                                                label(for='velocity') Sprint velocity
+                                                input#velocity.form-control(name="velocity" type='number', placeholder='Sprint velocity')
+                                            div.form-group
+                                                label(for='sprint_project') Sprint project
+                                                select#sprint_project.form-control(name="sprint_project", placeholder='Sprint project')
+                                                    option
+                                                         each project in projects
+                                                            option(label=project.name) #{project.id}
+                                            button.btn.btn-primary.center-block.margin-top20#registerBtn(type='submit') Create
+
+    script.
+        //if passing from router worked:
+        // var fp =!{flat_pickr};
+        // fp("#flatpickr-tryme");
+        flatpickr("#flatpickr-tryme", {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "d.m.Y"
+        })

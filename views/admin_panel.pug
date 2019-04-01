@@ -1,0 +1,51 @@
+extends layout
+
+block content
+
+    main.container(role="main")
+
+        .container.theme-showcase
+            .page-header
+                h3 Administration panel
+
+                .container
+                    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+
+                        ul.navbar-nav.mr-auto
+                            // a.navbar-brand Admin tools
+                            li.nav-item
+                                a.nav-link(href='/register') Add User
+                            li.nav-item
+                                a.nav-link(href='/projects/create') Add Project
+                hr
+
+            div.main.container
+                .card
+                    .card-header#bg-theme
+                        | System users
+                    .card-body
+                        table.table.table-bordered.table-hover(summary="List of all users")
+                            thead.thead-dark
+                                tr
+                                    //th User ID
+                                    th(scope="col") Username
+                                    th(scope="col") Name
+                                    th(scope="col") Surname
+                                    th(scope="col") E-mail
+                                    th(scope="col") Role
+                                    //th Edit
+                            tbody
+                                each user in users
+                                    tr
+                                        //td #{user.id}
+                                        td #{user.username}
+                                        td #{user.name}
+                                        td #{user.surname}
+                                        td #{user.email}
+                                        td #{user.is_user ? 'User' : 'Administrator'}
+                                        //td
+                                        //    a.btn.btn-primary(href="/users/" + user.id + "/details") Possible actions
+
+                                        //        i.fa.fa-arrow-left(aria-hidden='true' style="margin-left: 5px")
+
+

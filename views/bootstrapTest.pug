@@ -1,0 +1,20 @@
+extends layout
+
+block content
+
+    body
+        .container.theme-showcase
+            .page-header
+                h3 bootstrapTest
+
+            div.main.container
+                div.row
+                    div.col-md-12
+                        blockquote.blockquote.text-center
+                            p.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                            footer.blockquote-footer Someone famous in
+                                cite(title="Source Title")  Source Title
+
+                        a.btn.btn-primary#goBackHome(href='/') Go back home
+                            i.fa.fa-arrow-left(aria-hidden='true' style="margin-left: 5px")
+

@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}
+
+    // deprecated - was used at start of project
+    // div.main.container
+        div.row
+            div.col-md-12
+                a.btn.btn-primary#goToBootstrapTest(href='/bootstrapTest') Go to bootstrap test
+                a.btn.btn-primary#goToUsers(href='/users' style="margin-left: 10px;") Go to users
+                a.btn.btn-primary#logout(href='/logout' style="margin-left: 10px;") Logout

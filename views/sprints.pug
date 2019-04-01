@@ -1,0 +1,52 @@
+extends layout
+
+block content
+
+    body
+        main.container(role="main")
+            .container.theme-showcase
+                .page-header
+
+                    .page-header
+                        h3 List of all Sprints
+                        .container
+                            if(is_sm)
+                                nav.navbar.navbar-expand-lg.navbar-light.bg-light
+                                    ul.navbar-nav.mr-auto
+                                        li.nav-item
+                                            a.nav-link(href='/sprints/create') Add new Sprint
+                    hr
+
+                    div.main.container
+                        div.row
+                            if sprints.length
+                                div.col-md-12
+                                    table.table.table-bordered.table-hover(summary="List of all Sprints")
+                                        thead.thead-dark
+                                            tr
+                                                //th User ID
+                                                th(scope="col") Sprint ID
+                                                th(scope="col") Project name
+                                                th(scope="col") Start date
+                                                th(scope="col") End date
+                                                th(scope="col") Velocity
+
+                                                //th Edit
+                                        tbody
+                                            each sprint in sprints
+                                                tr
+                                                    td #{sprint.id}
+                                                    td
+                                                        if moment().isBetween(moment(sprint.startDate), moment(sprint.endDate), 'days', '[]')
+                                                            .p(style="color:green") #{sprint.Project.name} (Active)
+                                                        else
+                                                           .p #{sprint.Project.name}
+                                                    td #{moment(sprint.startDate).format('DD.MM.YYYY')}
+                                                    td #{moment(sprint.endDate).format('DD.MM.YYYY')}
+                                                    td #{sprint.velocity}
+
+                        if !sprints.length
+                            div.col-md-12
+                                p Seems like you do not have any sprints.
+                                p Enjoy your free day.
+

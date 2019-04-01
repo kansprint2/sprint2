@@ -1,0 +1,135 @@
+extends layout
+
+block content
+    body
+        main.container(role="main")
+            .container.theme-showcase
+                .page-header
+                    h3.ml-3.mb-3 #{project.name}
+
+                    .container
+                        nav.navbar.navbar-expand-lg.navbar-light.bg-light
+                            ul.navbar-nav.mr-auto
+                                li.nav-item
+                                    a.nav-link(href='/projects')
+                                        i.fas.fa-chevron-left
+                                        |   Projects
+
+                                if project.scrum_master == uid || project.product_owner == uid
+                                    li.nav-item
+                                        a.nav-link(href='/stories/project/'+ project.id + '/create') Add User Story
+
+                                if !isUser || project.scrum_master == uid
+                                    li.nav-item
+                                        a.nav-link(href='/projects/'+ project.id + '/edit') Edit Project
+                    hr
+
+                div.main.container
+                    div.col-md-12
+
+                        h6 Project Details
+                        p.mb-0 Members:
+                            each member in project.ProjectMembers
+                                | #{" "+ member.name}
+                                if project.ProjectMembers.length > 0 && member.id != project.ProjectMembers[project.ProjectMembers.length - 1].id
+                                    | ,
+                        p.mb-0 Scrum master: #{project.ScrumMaster.name} <br/>
+                        p.mb-0 Product owner: #{project.ProductOwner.name} <br/>
+                        p.mb-0 Created: #{moment(project.createdAt).format('DD.MM.YYYY')}
+                        p.mb-0 Modified: #{moment(project.updatedAt).format('DD.MM.YYYY')}
+                        br
+                        p.mb-0.font-italic #{project.description} <br/>
+
+                        hr
+                        h4(id="storiesDeck") Backlog
+                        br
+
+                        if stories.length
+
+                            div.card-deck
+                                .card.border-secondary
+                                    .card-header.alert-warning
+                                        | Unassigned Stories -
+                                        a#showMore.alert-warning(href='#storiesDeck')  Show less
+                                        .br
+                                        small All stories not assigned to sprint
+                                    .card-body
+                                        blockquote.blockquote.mb-0
+                                            .list-group
+                                                each story in stories
+                                                    if !story.sprint_id
+                                                        a.list-group-item.list-group-item-action.flex-column.align-items-start(class=story.importance === "won't have this time" ? 'wontHaveThisTime': "")
+                                                            .d-flex.w-100.justify-content-between
+                                                                p.mb-2 #{story.name}
+                                                            small Description: #{story.description}
+                                                            br
+                                                            small Acceptance criteria: #{story.acceptanceCriteria}
+                                                            br
+                                                            small#imporatnce Importance: #{story.importance}
+                                                            br
+                                                            small Business value: #{story.businessValue}
+                                                            br
+                                .card.border-secondary
+                                    .card-header.alert-primary
+                                        | Assigned
+                                        .br
+                                        small Uncompleted stories assigned to sprint
+                                    .card-body
+                                        blockquote.blockquote.mb-0
+                                            .list-group
+                                                each story in stories
+                                                    if(story.sprint_id === activeSprintId && !story.is_done && story.sprint_id != null)
+                                                        a.list-group-item.list-group-item-action.flex-column.align-items-start
+                                                            .d-flex.w-100.justify-content-between
+                                                                p.mb-2 #{story.name}
+                                                            small Description: #{story.description}
+                                                            br
+                                                            small Acceptance criteria: #{story.acceptanceCriteria}
+                                                            br
+                                                            small Importance: #{story.importance}
+                                                            br
+                                                            small Business value: #{story.businessValue}
+                                                            br
+
+                                .card.border-secondary
+                                    .card-header.alert-success
+                                        | Completed
+                                        .br
+                                        small Completed and Accepted Stories
+                                    .card-body
+                                        blockquote.blockquote.mb-0
+                                            .list-group
+                                                each story in stories
+                                                    if story.is_done
+                                                        a.list-group-item.list-group-item-action.flex-column.align-items-start
+                                                            .d-flex.w-100.justify-content-between
+                                                                p.mb-2 #{story.name}
+                                                            small Description: #{story.description}
+                                                            br
+                                                            small Acceptance criteria: #{story.acceptanceCriteria}
+                                                            br
+                                                            small Importance: #{story.importance}
+                                                            br
+                                                            small Business value: #{story.businessValue}
+                                                            br
+
+                        if !stories.length
+                            div.col-md-12
+                                p Project does not have any stories specified yet.
+
+    script.
+        showMore = document.getElementById('showMore');
+        function toggleShownStories() {
+            var elements = document.getElementsByClassName("wontHaveThisTime");
+
+            for(var i=0; i<elements.length; i++) {
+                if (elements[i].style.display === "none") {
+                    elements[i].style.display = "block";
+                    showMore.innerText = ' Show less'
+                } else {
+                    elements[i].style.display = "none";
+                    showMore.innerText = ' Show more'
+                }
+            }
+        }
+        showMore.onclick = toggleShownStories;

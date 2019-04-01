@@ -1,0 +1,95 @@
+body {
+  padding: 50px;
+  padding-top: 5rem;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.page-header {
+  padding-top: 5px;
+}
+
+hr {
+  width: 100%;
+}
+
+nav {
+  background: whitesmoke;
+}
+
+.panel-heading .accordion-toggle.collapsed:after {
+  /* symbol for "collapsed" panels */
+  content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+
+#alignCenterLogin {
+  margin-top: 30px;
+}
+
+@media (min-width: 768px) {
+  /* login vertical alignment */
+  /* https://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3 */
+  .vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+  }
+
+  #loginRow {
+    margin: 15px;
+  }
+
+  /* login center aligment */
+  /* https://stackoverflow.com/questions/22658141/css-center-form-in-page-horizontally-and-vertically */
+  #alignCenterLogin {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    -moz-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+.loginHtml {
+  height: 100%;
+}
+
+.loginBody {
+  min-height: 100%;
+  background: #f8f9fa;
+}
+
+.margin-center {
+  margin: 0 auto;
+}
+
+.margin-top20 {
+    margin-top: 20px;
+}
+
+/*admin panel*/
+#registerNewUserBtn {
+   width: 180px;
+   /*height: 34px;*/
+   margin-bottom: 30px;
+ }
+
+#addNewSprintBtn {
+  width: 180px;
+  /*height: 34px;*/
+  margin-bottom: 30px;
+}
+
+#createNewproject {
+  width: 180px;
+  /*height: 34px;*/
+  margin-bottom: 30px;
+}
+
+#bg-theme {
+  background-color: #f7f7de;
+}

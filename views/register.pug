@@ -1,0 +1,63 @@
+extends layout
+
+block content
+
+    main.container(role="main")
+        .container.theme-showcase
+            .page-header
+                h3 Register new user
+                p Warning: Username cannot be changed once set.
+
+                .container
+                    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+
+                        ul.navbar-nav.mr-auto
+                            li.nav-item
+                                a.nav-link(href='/admin_panel/')
+                                    i.fas.fa-chevron-left
+                                    |  Back
+                hr
+            div.main.container
+                .row
+                    if errorMessages !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-danger(role="alert")
+                                h4.alert-heading #{errorMessages}
+                                p Something went wrong. Please check if your form is correct or if this username already exists - otherwise try later or contact application administrator.
+
+                    if success !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-success(role="alert")
+                                h4.alert-heading Success.
+                                p New user - #{success} has been successfully added.
+
+                    div.col-md-9.col-md-offset-0.margin-center.margin-top20
+                        div.panel-body
+                            div
+                                form.well.form-horizontal(method='POST' action='/register')#register_form
+                                    div.panel-body
+                                        div.col-md-12.col-md-offset-0
+                                            div.form-group
+                                                label(for='name') First name:
+                                                input#name.form-control(type='text' placeholder='First name' name='name' value="")
+                                            div.form-group
+                                                label(for='surname') Surname:
+                                                input#surname.form-control(type='text' placeholder='Surname' name='surname' value="")
+                                            div.form-group
+                                                label(for='email') E-mail:
+                                                input#email.form-control(type='text' placeholder='E-mail' name='email' value="")
+                                            div.form-group
+                                                label(for='username') Username:
+                                                input#username.form-control(type='text' placeholder='Username' name='username' value="")
+                                            div.form-group
+                                                label(for='password1') Password:
+                                                input#password1.form-control(type='password' placeholder='Enter password' name='password' value="")
+                                            div.form-group
+                                                label(for='password2') Verify password:
+                                                input#password2.form-control(type='password' placeholder='Retype password' name='password2' value="")
+                                            div.custom-control.custom-checkbox
+                                                input#adminacc.custom-control-input(type='checkbox' name='is_user' value="0")
+                                                label.custom-control-label(for='adminacc') Administrator access
+
+
+                                            button.btn.btn-primary.center-block.margin-top20#registerBtn(type='submit') Register

@@ -1,0 +1,40 @@
+extends layout
+
+block content
+
+    body
+        main.container(role="main")
+            .container.theme-showcase
+                .page-header
+
+                div.main.container
+
+                    div.row
+                        div.col-md-12
+                            each project in projects
+                                a.list-group-item.list-group-item-action(href='/projects/' + project.id + '/view' style={'margin-bottom': '10px'})
+                                    .d-flex.w-100.justify-content-between
+                                        h5.mb-1 #{project.name}
+                                        small Created: #{moment(project.createdAt).format('DD.MM.YYYY')}
+
+                                    p.mb-1
+                                        |  #{project.description}
+
+                                    hr
+                                    p.mb-1
+                                        small Scrum Master: #{project.ScrumMaster.name}
+                                              <br> Product Owner: #{project.ProductOwner.name} <br>
+
+                                        small Project members:
+                                                each member in project.ProjectMembers
+                                                    |  #{member.name}
+                                                    if project.ProjectMembers.length > 0 && member.id != project.ProjectMembers[project.ProjectMembers.length - 1].id
+                                                        | ,
+
+
+                    if !projects.length
+                        div.col-md-12
+                            p Seems like you do not have any projects.
+                            p Enjoy your free day.
+
+

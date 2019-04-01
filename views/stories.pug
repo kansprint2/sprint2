@@ -1,0 +1,65 @@
+extends layout
+
+block content
+
+    main.container(role="main")
+        .container.theme-showcase
+            .page-header
+                if userStory
+                    h3 Edit User Story
+                if !userStory
+                    h3 Create User Story
+
+                .container
+                    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+                        ul.navbar-nav.mr-auto
+                            li.nav-item
+                                a.nav-link(href='/projects/'+ projectId + '/view')
+                                    i.fas.fa-chevron-left
+                                    |  Back
+                hr
+
+            div.main.container
+                .row
+                    if errorMessages !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-danger(role="alert")
+                                h4.alert-heading #{errorMessages}
+                                p Something went wrong. Please check if your form is correct or if this story name already exists - otherwise try later or contact application administrator.
+
+                    if success !== 0
+                        .col-md-12.col-md-offset-0.margin-top20
+                            .alert.alert-success(role="alert")
+                                h4.alert-heading Success.
+                                p #{success}.
+
+                    div.col-md-9.col-md-offset-0.margin-center.margin-top20
+                        div.panel-body
+                            div
+                                form.well.form-horizontal(method='POST' action=(userStory ? '/stories/'+ userStory.id + '/edit/' : '/stories/project/'+ projectId + '/create'))#story_form
+                                    div.panel-body
+                                        div.col-md-12.col-md-offset-0
+                                            div.form-group
+                                                label(for='name') Name:
+                                                input#name.form-control(type='text' placeholder='Enter Name' name='name' value=(userStory ? userStory.name : '') )
+                                            div.form-group
+                                                label(for='description') Description:
+                                                textarea#description.form-control(type='text' placeholder='Enter Description' name='description' value=(userStory ? userStory.description : ''))
+                                            div.form-group
+                                                label(for='acceptanceCriteria') Acceptance criteria:
+                                                textarea#acceptanceCriteria.form-control(placeholder='Enter Acceptance Criteria' name='acceptanceCriteria')
+                                                    | #{userStory ? userStory.acceptanceCriteria : ''}
+                                            div.form-group
+                                                label(for='importance') Importance:
+                                                select#importance.form-control(placeholder='Select Story Importance' name='importance')
+                                                    option
+                                                    each importance_val in importance_values
+                                                        option(label=importance_val selected=(userStory && userStory.importance == importance_val)) #{importance_val}
+                                            div.form-group
+                                                label(for='businessValue') Business Value:
+                                                input#businessValue.form-control(type='number' min=0, placeholder='Enter Business Value' name='businessValue' value=(userStory ? userStory.businessValue : ''))
+
+                                            if !userStory
+                                                button.btn.btn-primary.center-block.margin-top20#registerBtn(type='submit') Create
+                                            if userStory
+                                                button.btn.btn-primary.center-block.margin-top20#registerBtn(type='submit') Update

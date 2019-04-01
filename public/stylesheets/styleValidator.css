@@ -1,0 +1,14 @@
+/* style overrides for bootstrapValidator v0.5.3 to run on bootstrap 4*/
+
+.form-group.has-feedback.has-error input {
+    border-color: #a94442 !important;
+}
+
+/*.form-group.has-feedback.has-success input {
+    border-color: #2b542c !important;
+}*/
+
+.form-group.has-feedback.has-error .help-block {
+    color: #a94442 !important;
+}
+

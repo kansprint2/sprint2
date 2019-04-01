@@ -1,0 +1,55 @@
+extends layout
+
+block content
+
+    body
+        main.container(role="main")
+            .container.theme-showcase
+                .page-header
+
+                div.main.container
+
+                    div.row
+                        div.col-md-6
+                            if !myProjects.length
+                                div.col-md-12
+                                    p Seems like you do not have any projects.
+                                    p Enjoy your free day.
+
+                            if myProjects.length
+                                .card
+                                    .card-header#bg-theme
+                                        | My Projects
+                                    .card-body
+                                        blockquote.blockquote.mb-0
+
+                                            .list-group
+                                                each project in myProjects
+                                                    a.list-group-item.list-group-item-action.flex-column.align-items-start(href='/projects/'+project.id+'/view')
+                                                        .d-flex.w-100.justify-content-between
+                                                            h6.mb-1 #{project.name}
+                                                        p.mb-1(style="font-size:9pt")
+                                                            |  #{project.description}
+
+                        div.col-md-6
+                            if !myActiveSprints.length && myProjects.length
+                                div.col-md-12
+                                    p Seems like you don't have any active sprints.
+                                    p Enjoy your free day.
+
+                            if myActiveSprints.length
+                                .card
+                                    .card-header#bg-theme
+                                        | Active sprints
+                                    .card-body
+                                        blockquote.blockquote.mb-0
+
+                                            .list-group
+                                                each sprint in myActiveSprints
+                                                    div.list-group-item.list-group-item-action.flex-column.align-items-start
+                                                        .d-flex.w-100.justify-content-between
+                                                            h6.mb-1 Project: #{sprint.Project.name}
+                                                        p.mb-1(style="font-size:9pt")
+                                                            |  #{moment(sprint.startDate).format('DD.MM.YYYY')} - #{moment(sprint.endDate).format('DD.MM.YYYY')} (#{moment(sprint.endDate).diff(moment(),'days')} days left)
+
+
