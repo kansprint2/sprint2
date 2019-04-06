@@ -7,6 +7,7 @@ var middleware = require('./middleware.js');
 // models
 var User = models.User;
 var Projects = models.Project;
+const Stories = models.Stories;
 var UserProject = models.UserProject;
 
 // helpers
@@ -29,6 +30,54 @@ router.get('/:id/view', ProjectHelper.canAccessProject, async function(req, res,
     let activeSprintId = await SprintsHelper.currentActiveSprint(currentProject.id);
     res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
     activeSprintId:activeSprintId});
+});
+
+router.get('/:id/activate/:story_id', ProjectHelper.isSMorPM, async function(req, res, next) {
+    let project_id = req.params.id;
+    let story_id = req.params.story_id;
+
+    let story = await Stories.findOne({
+        where: {
+            id: story_id,
+        }
+    });
+    let activeSprintId = await SprintsHelper.currentActiveSprint(story.project_id);
+
+    if (activeSprintId !== undefined) {
+        // Set new attributes
+        story.setAttributes({
+            sprint_id: activeSprintId
+        });
+        await story.save();
+    }
+
+    let currentProject = await ProjectHelper.getProject(req.params.id);
+    let projectStories = await StoriesHelper.listStories(req.params.id);
+    res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
+        activeSprintId:activeSprintId});
+});
+
+router.get('/:id/deactivate/:story_id', ProjectHelper.isSMorPM, async function(req, res, next) {
+    let project_id = req.params.id;
+    let story_id = req.params.story_id;
+
+    let story = await Stories.findOne({
+        where: {
+            id: story_id,
+        }
+    });
+    let activeSprintId = await SprintsHelper.currentActiveSprint(story.project_id);
+
+    // Set new attributes
+    story.setAttributes({
+        sprint_id: null
+    });
+    await story.save();
+
+    let currentProject = await ProjectHelper.getProject(req.params.id);
+    let projectStories = await StoriesHelper.listStories(req.params.id);
+    res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
+        activeSprintId:activeSprintId});
 });
 
 // ------------------ endpoint for editing existing projects ------------------

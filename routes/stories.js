@@ -12,6 +12,7 @@ const Stories = models.Stories;
 // helpers
 const StoriesHelper = require('../helpers/StoriesHelper');
 const ProjectHelper = require('../helpers/ProjectHelper');
+const SprintsHelper = require('../helpers/SprintsHelper');
 
 //constants
 const importance_values = ['must have', 'could have', 'should have', 'won\'t have this time'];
