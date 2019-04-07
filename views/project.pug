@@ -60,18 +60,26 @@ block content
                                                     if !story.sprint_id
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start(class=story.importance === "won't have this time" ? 'wontHaveThisTime': "")
                                                             .d-flex.w-100.justify-content-between
-                                                                p.mb-2 #{story.name}
-                                                            small Description: #{story.description}
-                                                            br
-                                                            small Acceptance criteria: #{story.acceptanceCriteria}
-                                                            br
-                                                            small#imporatnce Importance: #{story.importance}
-                                                            br
-                                                            small Business value: #{story.businessValue}
-                                                            br
-                                                            form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id))
-                                                                input(type='hidden' value=story.id)
-                                                                button.btn.btn-primary Add to active sprint
+                                                            span(style='cursor: pointer').float-right.time-estimate-holder #{ story.timeEstimate ? story.timeEstimate : '' } &#128336;
+                                                            p.mb-2 #{story.name}
+                                                            div.not-time-estimate-form
+                                                                small Description: #{story.description}
+                                                                br
+                                                                small Acceptance criteria: #{story.acceptanceCriteria}
+                                                                br
+                                                                small#imporatnce Importance: #{story.importance}
+                                                                br
+                                                                small Business value: #{story.businessValue}
+                                                                br
+                                                                form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
+                                                                    input(type='hidden' value=story.id min=0)
+                                                                    button.btn.btn-primary Add to active sprint &#9658;
+                                                            form(method='POST' action=('/projects/' + project.id + '/time/' + story.id)).time-estimate-form
+                                                                span Time estimate: (Example : 1, 1.5, 1d 2h, 1.5d)
+                                                                    input(type='number').w-100
+                                                                div.text-right.mt-2
+                                                                    span.btn.btn-secondary.mr-2.time-estimate-cancel Cancel
+                                                                    button(type=submit).btn.btn-primary Save
                                 .card.border-secondary
                                     .card-header.alert-primary
                                         | Assigned
@@ -95,7 +103,7 @@ block content
                                                             br
                                                             form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
                                                                 input(type='hidden' value=story.id)
-                                                                button.btn.btn-danger Remove from active sprint
+                                                                button.btn.btn-danger &#9669; Remove from active sprint
 
                                 .card.border-secondary
                                     .card-header.alert-success
@@ -139,3 +147,17 @@ block content
             }
         }
         showMore.onclick = toggleShownStories;
+        window.onload = () => {
+            $('.time-estimate-form').hide();
+
+            $('.time-estimate-cancel').click(x => {
+                $(x.target).parent().parent().parent().find('.time-estimate-form').hide(100);
+                $(x.target).parent().parent().parent().find('.not-time-estimate-form').show(100);
+            });
+
+            $('.time-estimate-holder').click(x => {
+                $(x.target).parent().find('.time-estimate-form').show(100);
+                $(x.target).parent().find('.not-time-estimate-form').hide(100);
+            });
+        };
+

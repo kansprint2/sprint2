@@ -39,6 +39,16 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
+        timeEstimate: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            validate: {
+                min: {
+                    args: [0],
+                    msg: 'Cant be a negative value.'
+                }
+            }
+        },
         is_done: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
