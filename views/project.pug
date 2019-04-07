@@ -73,9 +73,12 @@ block content
                                                                 br
                                                                 form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
                                                                     input(type='hidden' value=story.id min=0)
-                                                                    button.btn.btn-primary Add to active sprint &#9658;
+                                                                    if activeSprintId !== null
+                                                                        button.btn.btn-primary Add to active sprint &#9658;
+                                                                    else
+                                                                        button(disabled).btn.btn-secondary No active sprint!
                                                             form(method='POST' action=('/projects/' + project.id + '/time/' + story.id)).time-estimate-form
-                                                                span Time estimate: (Example : 1, 1.5, 1d 2h, 1.5d)
+                                                                small Time estimate: (Example : 1, 1.5, 1d 2h, 1.5d)
                                                                     input(type='number').w-100
                                                                 div.text-right.mt-2
                                                                     span.btn.btn-secondary.mr-2.time-estimate-cancel Cancel
