@@ -79,7 +79,7 @@ block content
                                                                         button(disabled).btn.btn-secondary No active sprint!
                                                             form(method='POST' action=('/projects/' + project.id + '/time/' + story.id)).time-estimate-form
                                                                 small Time estimate: (Example : 1, 1.5, 1d 2h, 1.5d)
-                                                                    input(type='number').w-100
+                                                                    input(type='text' name='time' value=story.timeEstimate).w-100
                                                                 div.text-right.mt-2
                                                                     span.btn.btn-secondary.mr-2.time-estimate-cancel Cancel
                                                                     button(type=submit).btn.btn-primary Save
