@@ -133,9 +133,12 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
-                                                            form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
-                                                                input(type='hidden' value=story.id)
-                                                                button.btn.btn-danger &#9669; Remove from active sprint
+                                                            if project.product_owner == uid
+                                                                form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
+                                                                    input(type='hidden' value=story.id)
+                                                                    button.btn.btn-danger &#9669; Remove from active sprint
+                                                            else
+                                                                p
 
                                 .card.border-secondary
                                     .card-header.alert-success
