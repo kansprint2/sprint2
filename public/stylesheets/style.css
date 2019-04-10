@@ -93,3 +93,17 @@ nav {
 #bg-theme {
   background-color: #f7f7de;
 }
+
+
+.tasks-box {
+  background: #e6e6e6;
+  position: fixed;
+  bottom: 3em;
+  left: 3em;
+  right: 3em;
+  top: 3em;
+  padding: 2em;
+  z-index: 9999999999;
+  box-shadow: #0c0c0c 0 0 40px;
+  overflow: auto;
+}

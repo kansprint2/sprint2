@@ -48,6 +48,41 @@ block content
                         // pre #{ JSON.stringify(activeSprint) }
 
                         if stories.length
+
+
+                            // RENDER TASKS
+                            each story in stories
+                                div.tasks-box(id='task-box-' + story.id)
+                                    form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
+                                        p.mb-2 #{story.name}
+                                        div
+                                            div.row
+                                                div.col
+                                                    span Task description
+                                                    span.pl-1
+                                                    input(name=(story.id + '_' + 'title') type='text' placeholder='' style='max-width: 600px')
+                                                    span.pl-3
+                                                    span Time estimate
+                                                    span.pl-1
+                                                    input(name=(story.id + '_' + 'time') type='number' style='width: 60px')
+                                                    span &#128336;
+                                                    span.pl-3
+                                                    select(name=(story.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
+                                                        each member in project.ProjectMembers
+                                                            option(value=member.id) #{member.name}
+                                                    span.ml-5
+                                                    input(name=(story.id + '_' + 'accept') type='checkbox').form-check-input
+                                                    label.form-check-label Accept
+                                                    span.ml-5
+                                                    a.btn.btn-danger Remove
+                                            a.btn.btn-secondary Add new task
+                                        br
+                                        div.text-right
+                                            a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
+                                            button.btn.btn-primary Save
+
+                            // RENDER TASKS
+
                             div.card-deck
                                 .card.border-secondary
                                     .card-header.alert-warning
@@ -75,6 +110,8 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
+                                                            button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
+                                                            br
                                                             if project.scrum_master == uid || project.product_owner == uid
                                                                 div.buttons.margin-top20
                                                                     script.
@@ -97,7 +134,7 @@ block content
                                                                     button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
                                                                 br
                                                                 br
-                                                                form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
+                                                                form(method='GET' action=-('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
                                                                     input(type='hidden' value=story.id min=0)
                                                                     if activeSprintId !== null
                                                                         if story.timeEstimate !== null
@@ -137,6 +174,9 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
+                                                            button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
+                                                            br
+                                                            br
                                                             if true
                                                                 form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
                                                                     input(type='hidden' value=story.id)
@@ -166,12 +206,23 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
+                                                            button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
+                                                            br
 
                         if !stories.length
                             div.col-md-12
                                 p Project does not have any stories specified yet.
 
     script.
+
+
+
+        function showTasks(story) {
+            $('#task-box-' + story.id).show();
+            console.log(story);
+        }
+
+
         showMore = document.getElementById('showMore');
         function toggleShownStories() {
             var elements = document.getElementsByClassName("wontHaveThisTime");
@@ -189,11 +240,18 @@ block content
         showMore.onclick = toggleShownStories;
         window.onload = () => {
             $('.time-estimate-form').hide();
+            $('.tasks-box').hide();
+
+            $('.cancel-tasks').click(x => {
+                $('.tasks-box').hide();
+            });
 
             $('.time-estimate-cancel').click(x => {
                 $(x.target).parent().parent().parent().parent().find('.time-estimate-form').hide(100);
                 $(x.target).parent().parent().parent().parent().find('.not-time-estimate-form').show(100);
             });
+
+
 
             $('.time-estimate-holder').click(x => {
                 $(x.target).parent().parent().find('.time-estimate-form').show(100);
