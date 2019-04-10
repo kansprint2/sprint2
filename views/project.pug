@@ -62,7 +62,7 @@ block content
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start(class=story.importance === "won't have this time" ? 'wontHaveThisTime': "")
                                                             .d-flex.w-100.justify-content-between
                                                                 p.mb-2 #{story.name}
-                                                                if project.scrum_master == uid || project.product_owner == uid
+                                                                if project.scrum_master == uid
                                                                     span(style='cursor: pointer').float-right.time-estimate-holder #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
                                                                 else
                                                                     span(style='cursor: pointer').float-right #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
@@ -133,7 +133,7 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
-                                                            if project.product_owner == uid
+                                                            if false
                                                                 form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
                                                                     input(type='hidden' value=story.id)
                                                                     button.btn.btn-danger &#9669; Remove from active sprint

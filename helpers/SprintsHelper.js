@@ -29,6 +29,35 @@ async function currentActiveSprint(project_id){
     return null
 }
 
+
+async function currentActiveSprintAll(project_id){
+    let sprint = await Sprint.findAll({
+        include: [
+            {
+                model: models.Project,
+                as: 'Project',
+                attributes: ['name','id'],
+
+            },
+        ],
+        where: {
+            startDate: {
+                [models.Sequelize.Op.lte]: new Date()
+            },
+            endDate: {
+                [models.Sequelize.Op.gte]: new Date()
+            },
+            project_id: project_id,
+        }
+    });
+
+    if (sprint.length > 0){
+        return sprint[0]
+    }
+
+    return null
+}
+
 async function sprintsInProjects(project_ids){
     console.log("sprint query");
     let sprints = await models.Sprint.findAll({
@@ -50,4 +79,5 @@ async function sprintsInProjects(project_ids){
 module.exports = {
     currentActiveSprint,
     sprintsInProjects,
+    currentActiveSprintAll
 };
