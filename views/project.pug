@@ -62,6 +62,7 @@ block content
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start(class=story.importance === "won't have this time" ? 'wontHaveThisTime': "")
                                                             .d-flex.w-100.justify-content-between
                                                                 p.mb-2 #{story.name}
+                                                                span(style='cursor: pointer').float-right.time-estimate-holder #{ story.timeEstimate ? story.timeEstimate : '' } &#128336;
                                                             small Description: #{story.description}
                                                             br
                                                             small Acceptance criteria: #{story.acceptanceCriteria}
@@ -174,13 +175,13 @@ block content
             $('.time-estimate-form').hide();
 
             $('.time-estimate-cancel').click(x => {
-                $(x.target).parent().parent().parent().find('.time-estimate-form').hide(100);
-                $(x.target).parent().parent().parent().find('.not-time-estimate-form').show(100);
+                $(x.target).parent().parent().parent().parent().find('.time-estimate-form').hide(100);
+                $(x.target).parent().parent().parent().parent().find('.not-time-estimate-form').show(100);
             });
 
             $('.time-estimate-holder').click(x => {
-                $(x.target).parent().find('.time-estimate-form').show(100);
-                $(x.target).parent().find('.not-time-estimate-form').hide(100);
+                $(x.target).parent().parent().find('.time-estimate-form').show(100);
+                $(x.target).parent().parent().find('.not-time-estimate-form').hide(100);
             });
         };
 
