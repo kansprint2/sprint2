@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "node --inspect ./bin/www"
+    "debug": "node --inspect ./bin/www",
+    "sequelize-db:seed:all ": "sequelize db:seed:all"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",

@@ -91,6 +91,18 @@ block content
                                                                     button.btn.btn-primary.float-left(id='editStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/edit' onclick='edit(' +story.id+')') Edit                                                                        
                                                                     button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
                                                                 br
+																form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
+                                                                    input(type='hidden' value=story.id min=0)
+                                                                    if activeSprintId !== null
+                                                                        button.btn.btn-primary Add to active sprint &#9658;
+                                                                    else
+                                                                        button(disabled).btn.btn-secondary No active sprint!
+                                                            form(method='POST' action=('/projects/' + project.id + '/time/' + story.id)).time-estimate-form
+                                                                small Time estimate: (Example : 1, 1.5, 1d 2h, 1.5d)
+                                                                    input(type='text' name='time' value=story.timeEstimate).w-100
+                                                                div.text-right.mt-2
+                                                                    span.btn.btn-secondary.mr-2.time-estimate-cancel Cancel
+                                                                    button(type=submit).btn.btn-primary Save
                                 .card.border-secondary
                                     .card-header.alert-primary
                                         | Assigned
@@ -112,6 +124,9 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
+                                                            form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
+                                                                input(type='hidden' value=story.id)
+                                                                button.btn.btn-danger &#9669; Remove from active sprint
 
                                 .card.border-secondary
                                     .card-header.alert-success
@@ -155,3 +170,17 @@ block content
             }
         }
         showMore.onclick = toggleShownStories;
+        window.onload = () => {
+            $('.time-estimate-form').hide();
+
+            $('.time-estimate-cancel').click(x => {
+                $(x.target).parent().parent().parent().find('.time-estimate-form').hide(100);
+                $(x.target).parent().parent().parent().find('.not-time-estimate-form').show(100);
+            });
+
+            $('.time-estimate-holder').click(x => {
+                $(x.target).parent().find('.time-estimate-form').show(100);
+                $(x.target).parent().find('.not-time-estimate-form').hide(100);
+            });
+        };
+
