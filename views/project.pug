@@ -89,7 +89,7 @@ block content
                                                                             }
                                                                         };
                                                                     button.btn.btn-primary.float-left(id='editStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/edit' onclick='edit(' +story.id+')') Edit                                                                        
-                                                     Analiza zgodb in razdelitev na subtaske               button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
+                                                                    button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
                                                                 br
                                                                 form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
                                                                     input(type='hidden' value=story.id min=0)
