@@ -45,8 +45,9 @@ block content
                         h4(id="storiesDeck") Backlog
                         br
 
-                        if stories.length
+                        // pre #{ JSON.stringify(activeSprint) }
 
+                        if stories.length
                             div.card-deck
                                 .card.border-secondary
                                     .card-header.alert-warning
@@ -100,7 +101,10 @@ block content
                                                                     input(type='hidden' value=story.id min=0)
                                                                     if activeSprintId !== null
                                                                         if story.timeEstimate !== null
-                                                                            button.btn.btn-primary Add to active sprint &#9658;
+                                                                            if ((stories.reduce((a, story) => story.sprint_id === activeSprintId && !story.is_done && story.sprint_id != null ? (a + story.timeEstimate) : a, 0)) + story.timeEstimate) <= (+activeSprint.velocity)
+                                                                                button.btn.btn-primary Add to active sprint &#9658;
+                                                                            else
+                                                                                small(style='color: red') Active sprint is full.
                                                                         else
                                                                             small(style='color: red') Please enter time estimate.
                                                                     else
@@ -133,7 +137,7 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
-                                                            if false
+                                                            if true
                                                                 form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
                                                                     input(type='hidden' value=story.id)
                                                                     button.btn.btn-danger &#9669; Remove from active sprint
