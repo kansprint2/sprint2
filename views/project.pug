@@ -62,7 +62,10 @@ block content
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start(class=story.importance === "won't have this time" ? 'wontHaveThisTime': "")
                                                             .d-flex.w-100.justify-content-between
                                                                 p.mb-2 #{story.name}
-                                                                span(style='cursor: pointer').float-right.time-estimate-holder #{ story.timeEstimate ? story.timeEstimate : '' } &#128336;
+                                                                if project.scrum_master == uid || project.product_owner == uid
+                                                                    span(style='cursor: pointer').float-right.time-estimate-holder #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
+                                                                else
+                                                                    span(style='cursor: pointer').float-right #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
                                                             small Description: #{story.description}
                                                             br
                                                             small Acceptance criteria: #{story.acceptanceCriteria}
@@ -92,10 +95,14 @@ block content
                                                                     button.btn.btn-primary.float-left(id='editStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/edit' onclick='edit(' +story.id+')') Edit                                                                        
                                                                     button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
                                                                 br
+                                                                br
                                                                 form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
                                                                     input(type='hidden' value=story.id min=0)
                                                                     if activeSprintId !== null
-                                                                        button.btn.btn-primary Add to active sprint &#9658;
+                                                                        if story.timeEstimate !== null
+                                                                            button.btn.btn-primary Add to active sprint &#9658;
+                                                                        else
+                                                                            small(style='color: red') Please enter time estimate.
                                                                     else
                                                                         button(disabled).btn.btn-secondary No active sprint!
                                                             form(method='POST' action=('/projects/' + project.id + '/time/' + story.id)).time-estimate-form
@@ -117,6 +124,7 @@ block content
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start
                                                             .d-flex.w-100.justify-content-between
                                                                 p.mb-2 #{story.name}
+                                                                span(style='cursor: pointer').float-right #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
                                                             small Description: #{story.description}
                                                             br
                                                             small Acceptance criteria: #{story.acceptanceCriteria}
@@ -142,6 +150,7 @@ block content
                                                         a.list-group-item.list-group-item-action.flex-column.align-items-start
                                                             .d-flex.w-100.justify-content-between
                                                                 p.mb-2 #{story.name}
+                                                                span(style='cursor: pointer').float-right #{ story.timeEstimate ? (story.timeEstimate + 'h') : '' } &#128336;
                                                             small Description: #{story.description}
                                                             br
                                                             small Acceptance criteria: #{story.acceptanceCriteria}
