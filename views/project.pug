@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    script.
     body
         main.container(role="main")
             .container.theme-showcase
@@ -69,6 +70,27 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
+                                                            if project.scrum_master == uid || project.product_owner == uid
+                                                                div.buttons.margin-top20
+                                                                    script.
+                                                                        function edit (id) {
+                                                                            location.href = document.getElementById('editStory'+id).getAttribute("href");
+                                                                        };
+                                                                        function deleteStory (id) {
+                                                                            if (confirm("Do you really want to delete this story?")){
+                                                                                $.ajax({
+                                                                                    url: document.getElementById("deleteStory"+id).getAttribute("href"),
+                                                                                    type: 'DELETE',
+                                                                                    success: function(result) {
+                                                                                        console.log(result)
+                                                                                        location.reload();
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        };
+                                                                    button.btn.btn-primary.float-left(id='editStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/edit' onclick='edit(' +story.id+')') Edit                                                                        
+                                                                    button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
+                                                                br
                                 .card.border-secondary
                                     .card-header.alert-primary
                                         | Assigned

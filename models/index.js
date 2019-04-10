@@ -7,7 +7,7 @@ var basename  = path.basename(__filename);
 var db        = {};
 
 var sequelize = new Sequelize('postgresDB', 'userDB', 'postgres', {
-    host: 'localhost',
+    host: '192.168.99.100',
     dialect: 'postgres',
     protocol: 'postgres',
     port:     '5432',

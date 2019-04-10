@@ -44,7 +44,8 @@ block content
                                                 input#name.form-control(type='text' placeholder='Enter Name' name='name' value=(userStory ? userStory.name : '') )
                                             div.form-group
                                                 label(for='description') Description:
-                                                textarea#description.form-control(type='text' placeholder='Enter Description' name='description' value=(userStory ? userStory.description : ''))
+                                                textarea#description.form-control(placeholder='Enter Description' name='description')
+                                                    | #{userStory ? userStory.description : ''}
                                             div.form-group
                                                 label(for='acceptanceCriteria') Acceptance criteria:
                                                 textarea#acceptanceCriteria.form-control(placeholder='Enter Acceptance Criteria' name='acceptanceCriteria')

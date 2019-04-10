@@ -70,17 +70,17 @@ router.post('/project/:id/create', ProjectHelper.isSMorPM, async function(req, r
 
 
 // ------------------ endpoint for editing existing story ------------------
-router.get('/:id/edit/', ProjectHelper.isSMorPM, async function(req, res, next) {
-    let userStory = await StoriesHelper.getStory(req.params.id);
+router.get('/:id/:stid/edit', ProjectHelper.isSMorPM, async function(req, res, next) {
+    let userStory = await StoriesHelper.getStory(req.params.stid);
 
     return res.render('stories', { errorMessages: 0, success: 0, userStory: userStory,
         projectId: userStory.project_id, importance_values: importance_values, uid: req.user.id, username: req.user.username, isUser: req.user.is_user});
 
 });
 
-router.post('/:id/edit/', ProjectHelper.isSMorPM, async function(req, res, next) {
+router.post('/:stid/edit', ProjectHelper.isSMorPM, async function(req, res, next) {
     let data = req.body;
-    let story_id = req.params.id;
+    let story_id = req.params.stid;
 
     let story = await Stories.findOne({
         where: {
@@ -114,6 +114,24 @@ router.post('/:id/edit/', ProjectHelper.isSMorPM, async function(req, res, next)
     return res.render('stories', { errorMessages: 0, success: req.flash('success'), userStory: story_updated,
         projectId: story.project_id, importance_values: importance_values, uid: req.user.id, username: req.user.username, isUser: req.user.is_user});
 
+});
+
+// ------------------ endpoint for deleting existing story ------------------
+router.delete('/:id/:stid/delete', ProjectHelper.isSMorPM, async function (req, res, next) {
+    console.log("INSIDE DELETE!!", req.params.id, req.params.stid)
+    let story = await Stories.findOne({
+        where: {
+            id: req.params.stid,
+        }
+    });
+    await Stories.destroy({
+        where: {
+            id: req.params.stid,
+        }
+    });
+    req.flash('success', 'User story - ' + story.name + ' has been successfully deleted');
+    return res.end('{"success" : "User story - ' + story.name + ' has been successfully deleted"'+', "status" : 200}');
+    
 });
 
 module.exports = router;
