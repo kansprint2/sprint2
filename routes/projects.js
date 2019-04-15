@@ -54,10 +54,7 @@ router.get('/:id/activate/:story_id', ProjectHelper.isSMorPM, async function(req
         await story.save();
     }
 
-    let currentProject = await ProjectHelper.getProject(req.params.id);
-    let projectStories = await StoriesHelper.listStories(req.params.id);
-    res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
-        activeSprintId:activeSprintId, activeSprint});
+    res.redirect('/projects/' + project_id + '/view');
 });
 
 router.get('/:id/deactivate/:story_id', ProjectHelper.isSMorPM, async function(req, res, next) {
@@ -78,10 +75,7 @@ router.get('/:id/deactivate/:story_id', ProjectHelper.isSMorPM, async function(r
     });
     await story.save();
 
-    let currentProject = await ProjectHelper.getProject(req.params.id);
-    let projectStories = await StoriesHelper.listStories(req.params.id);
-    res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
-        activeSprintId:activeSprintId, activeSprint});
+    res.redirect('/projects/' + project_id + '/view');
 });
 
 
@@ -116,10 +110,7 @@ router.post('/:id/time/:story_id', ProjectHelper.isSMorPM, async function(req, r
     });
     await story.save();
 
-    let currentProject = await ProjectHelper.getProject(req.params.id);
-    let projectStories = await StoriesHelper.listStories(req.params.id);
-    res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
-        activeSprintId:activeSprintId, activeSprint});
+    res.redirect('/projects/' + project_id + '/view');
 });
 
 // ------------------ endpoint for editing existing projects ------------------

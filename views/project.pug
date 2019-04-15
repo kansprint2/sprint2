@@ -53,11 +53,11 @@ block content
                             // RENDER TASKS
                             each story in stories
                                 div.tasks-box(id='task-box-' + story.id)
-                                    form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
-                                        p.mb-2 #{story.name}
-                                        div
-                                            div.row
-                                                div.col
+                                    p.mb-2 #{story.name}
+                                    div
+                                        div.row
+                                            div.col
+                                                form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
                                                     span Task description
                                                     span.pl-1
                                                     input(name=(story.id + '_' + 'title') type='text' placeholder='' style='max-width: 600px')
@@ -74,12 +74,12 @@ block content
                                                     input(name=(story.id + '_' + 'accept') type='checkbox').form-check-input
                                                     label.form-check-label Accept
                                                     span.ml-5
-                                                    a.btn.btn-danger Remove
-                                            a.btn.btn-secondary Add new task
-                                        br
-                                        div.text-right
-                                            a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
-                                            button.btn.btn-primary Save
+                                                a.btn.btn-danger Remove
+                                        a.btn.btn-secondary Add new task
+                                    br
+                                    div.text-right
+                                        a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
+                                        button.btn.btn-primary Save
 
                             // RENDER TASKS
 
@@ -134,7 +134,7 @@ block content
                                                                     button.btn.btn-danger.float-right(id='deleteStory'+story.id href='/stories/'+ project.id +'/'+ story.id + '/delete' onclick='deleteStory(' +story.id+')') Delete
                                                                 br
                                                                 br
-                                                                form(method='GET' action=-('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
+                                                                form(method='GET' action=('/projects/'+ project.id + '/activate/' + story.id)).text-right.mt-2
                                                                     input(type='hidden' value=story.id min=0)
                                                                     if activeSprintId !== null
                                                                         if story.timeEstimate !== null
