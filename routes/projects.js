@@ -286,4 +286,21 @@ router.post('/:id/stories/:story_id/tasks', ProjectHelper.canAccessProject, asyn
     }
 });
 
+router.delete('/:id/tasks/:tid', ProjectHelper.isSMorPM, async function (req, res, next) {
+    try {
+        await Task.destroy({
+            where: {
+                id: req.params.tid,
+            }
+        });
+    }
+
+    catch (e) {
+        res.status(400).send({success: false, stack: e});
+    }
+
+    res.status(200).send({success: true});
+
+});
+
 module.exports = router;
