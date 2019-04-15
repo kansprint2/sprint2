@@ -288,7 +288,7 @@ router.post('/:id/stories/:story_id/tasks', ProjectHelper.canAccessProject, asyn
             await task.save();
         }
 
-        res.status(200).send({success: true});
+        res.redirect('/projects/' + project_id + '/view');
 
     } catch (e) {
         console.log(data);
