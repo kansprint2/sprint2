@@ -30,6 +30,27 @@ router.get('/:id/view', ProjectHelper.canAccessProject, async function(req, res,
     let projectStories = await StoriesHelper.listStories(req.params.id);
     let activeSprintId = await SprintsHelper.currentActiveSprint(currentProject.id);
     let activeSprint = await SprintsHelper.currentActiveSprintAll(currentProject.id);
+
+    (projectStories || []).forEach(x => {
+        x.tasks = [
+            {
+                id: 0,
+                name: 'make me not hardcoded lol',
+                isAccepted: false,
+                story_id: x.id,
+                timeEstimate: 2
+            }  ,
+            {
+                id: 1,
+                name: 'make me not hardcoded lol',
+                isAccepted: true,
+                story_id: x.id,
+                timeEstimate: null
+            }
+        ];
+    });
+
+
     res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
     activeSprintId:activeSprintId, activeSprint});
 });

@@ -54,32 +54,53 @@ block content
                             each story in stories
                                 div.tasks-box(id='task-box-' + story.id)
                                     p.mb-2 #{story.name}
-                                    div
+                                    form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
                                         div.row
                                             div.col
-                                                form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
-                                                    span Task description
-                                                    span.pl-1
-                                                    input(name=(story.id + '_' + 'title') type='text' placeholder='' style='max-width: 600px')
-                                                    span.pl-3
-                                                    span Time estimate
-                                                    span.pl-1
-                                                    input(name=(story.id + '_' + 'time') type='number' style='width: 60px')
-                                                    span &#128336;
-                                                    span.pl-3
-                                                    select(name=(story.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
-                                                        each member in project.ProjectMembers
-                                                            option(value=member.id) #{member.name}
-                                                    span.ml-5
-                                                    input(name=(story.id + '_' + 'accept') type='checkbox').form-check-input
-                                                    label.form-check-label Accept
-                                                    span.ml-5
-                                                a.btn.btn-danger Remove
-                                        a.btn.btn-secondary Add new task
-                                    br
-                                    div.text-right
-                                        a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
-                                        button.btn.btn-primary Save
+                                                div
+                                                    div.tasks
+                                                        each task in story.tasks
+                                                            div
+                                                                span Task description
+                                                                span.pl-1
+                                                                input(name=(task.id + '_' + 'title') value=task.name type='text' placeholder='' style='max-width: 600px')
+                                                                span.pl-3
+                                                                span Time estimate
+                                                                span.pl-1
+                                                                input(name=(task.id + '_' + 'time') value=task.timeEstimate type='number' style='width: 60px')
+                                                                span &#128336;
+                                                                span.pl-3
+                                                                select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
+                                                                    each member in project.ProjectMembers
+                                                                        option(value=member.id) #{member.name}
+                                                                span.ml-5
+                                                                input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox').form-check-input
+                                                                label.form-check-label Accept
+                                                                span.ml-5
+                                                                a.btn.btn-danger.rm-task-btn Remove
+                                                    div.new-task
+                                                        span Task description
+                                                        span.pl-1
+                                                        input(name=('NEW_' + 'title') type='text' placeholder='' style='max-width: 600px')
+                                                        span.pl-3
+                                                        span Time estimate
+                                                        span.pl-1
+                                                        input(name=('NEW_' + 'time')  type='number' style='width: 60px')
+                                                        span &#128336;
+                                                        span.pl-3
+                                                        select(name=('NEW_' + 'member') style='display: inline-block; width: 200px;').form-control
+                                                            each member in project.ProjectMembers
+                                                                option(value=member.id) #{member.name}
+                                                        span.ml-5
+                                                        input(name=('NEW_' + 'accept') type='checkbox').form-check-input
+                                                        label.form-check-label Accept
+                                                        span.ml-5
+                                                        a.btn.btn-danger.rm-task-btn Remove
+                                                    a.btn.btn-secondary.add-task-btn.text-right Add new task
+                                        br
+                                        div.text-right
+                                            a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
+                                            button.btn.btn-primary Save
 
                             // RENDER TASKS
 
@@ -246,12 +267,24 @@ block content
                 $('.tasks-box').hide();
             });
 
+            $('.rm-task-btn').click(x => {
+                $(x.target).parent().remove();
+            });
+
+            $('.add-task-btn').click(x => {
+                const c = $($(x.target).parent().find('.new-task')[0]).clone().removeClass('new-task');
+                $($(x.target).parent().find('.tasks')[0]).append(c);
+
+                $('.rm-task-btn').click(x => {
+                    $(x.target).parent().remove();
+                });
+            });
+
+
             $('.time-estimate-cancel').click(x => {
                 $(x.target).parent().parent().parent().parent().find('.time-estimate-form').hide(100);
                 $(x.target).parent().parent().parent().parent().find('.not-time-estimate-form').show(100);
             });
-
-
 
             $('.time-estimate-holder').click(x => {
                 $(x.target).parent().parent().find('.time-estimate-form').show(100);

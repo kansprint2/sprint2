@@ -107,3 +107,11 @@ nav {
   box-shadow: #0c0c0c 0 0 40px;
   overflow: auto;
 }
+
+.new-task {
+    display: none;
+}
+
+.tasks-box {
+    display: none;
+}
