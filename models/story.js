@@ -75,6 +75,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'sprint_id',
             as: 'Sprint'
         });
+        models.Stories.hasMany(models.Task, {
+            onDelete: "CASCADE",
+            foreignKey: 'story_id'
+        })
     };
 
     return Stories;

@@ -1,6 +1,7 @@
 const models = require('../models');
 
 const Stories = models.Stories;
+const Task = models.Task;
 var sequelize = require('sequelize')
 
 async function isValidName(userStory) {
@@ -23,8 +24,9 @@ async function listStories(projectId) {
     return await Stories.findAll( {
         where: {
             project_id: projectId,
-        }
-    });
+        },
+        include: [Task]
+    })
 }
 
 async function getStory(storyID) {

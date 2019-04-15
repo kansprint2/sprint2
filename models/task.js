@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
         timeEstimate: {
             type: DataTypes.INTEGER,
             allowNull: true,
@@ -23,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
                     msg: 'Cant be a negative value.'
                 }
             }
+        },
+        isAccepted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
         },
         createdAt: {
             field: 'createdat',
@@ -50,8 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     Task.associate = function (models) {
         models.Task.belongsTo(models.Stories, {
             onDelete: "CASCADE",
-            foreignKey: 'story_id',
-            as: 'Stories'
+            foreignKey: 'story_id'
         });
         models.Task.belongsTo(models.User, {
             onDelete: "CASCADE",
