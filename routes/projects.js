@@ -9,6 +9,7 @@ var User = models.User;
 var Projects = models.Project;
 const Stories = models.Stories;
 var UserProject = models.UserProject;
+const Task = models.Task;
 
 // helpers
 var ProjectHelper = require('../helpers/ProjectHelper');
@@ -234,6 +235,55 @@ router.post('/create/', middleware.isAllowed, async function(req, res, next) {
 
     }
 
+});
+
+router.post('/:id/stories/:story_id/tasks', ProjectHelper.canAccessProject, async function(req, res, next) {
+    let project_id = req.params.id;
+    let story_id = req.params.story_id;
+
+    let data = req.body;
+
+    try {
+
+        // create new
+        if (!data.id) {
+            const task = Task.build({
+                name: data.name,
+                isAccepted: data.isAccepted,
+                story_id: story_id,
+                timeEstimate: data.timeEstimate,
+                user_id: data.user_id
+            });
+
+            await task.save();
+        }
+
+        else {
+            const task = await Task.findOne({
+                where: {
+                    id:data.id,
+                }
+            });
+
+            task.setAttributes({
+                name: data.name,
+                isAccepted: data.isAccepted,
+                story_id: data.story_id,
+                timeEstimate: data.timeEstimate,
+                user_id: data.user_id
+            });
+
+            await task.save();
+        }
+
+        res.status(200).send({success: true});
+
+    } catch (e) {
+        console.log(data);
+        console.log(e);
+        res.status(400).send({success: false});
+
+    }
 });
 
 module.exports = router;
