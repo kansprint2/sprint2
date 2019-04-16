@@ -31,25 +31,7 @@ router.get('/:id/view', ProjectHelper.canAccessProject, async function(req, res,
     let activeSprintId = await SprintsHelper.currentActiveSprint(currentProject.id);
     let activeSprint = await SprintsHelper.currentActiveSprintAll(currentProject.id);
 
-    (projectStories || []).forEach(x => {
-        x.tasks = [
-            {
-                id: 0,
-                name: 'make me not hardcoded lol',
-                isAccepted: false,
-                story_id: x.id,
-                timeEstimate: 2
-            }  ,
-            {
-                id: 1,
-                name: 'make me not hardcoded lol',
-                isAccepted: true,
-                story_id: x.id,
-                timeEstimate: null
-            }
-        ];
-    });
-
+    // tasks are included in projectStories
 
     res.render('project', { errorMessages: 0, success: 0, pageName: 'projects', project: currentProject, stories: projectStories, uid: req.user.id, username: req.user.username, isUser: req.user.is_user,
     activeSprintId:activeSprintId, activeSprint});
@@ -249,52 +231,72 @@ router.post('/create/', middleware.isAllowed, async function(req, res, next) {
 
 });
 
-router.post('/:id/stories/:story_id/tasks', ProjectHelper.canAccessProject, async function(req, res, next) {
+router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async function(req, res, next) {
     let project_id = req.params.id;
     let story_id = req.params.story_id;
 
     let data = req.body;
+    console.log(data);
 
     try {
 
-        // create new
-        if (!data.id) {
-            const task = Task.build({
-                name: data.name,
-                isAccepted: data.isAccepted,
-                story_id: story_id,
-                timeEstimate: data.timeEstimate,
-                user_id: data.user_id
-            });
+        let cur_tasks = await Task.findAll({
+            where: {
+                story_id: story_id
+            }
+        });
 
-            await task.save();
-        }
+        for (let cur_task of cur_tasks) {
+            let id = cur_task.dataValues.id;
 
-        else {
-            const task = await Task.findOne({
-                where: {
-                    id:data.id,
+            // update
+            if (data[id + '_title']) {
+                cur_task.setAttributes({
+                    name: data[id + '_title'],
+                    isAccepted: data[id + '_accept'] || false,
+                    story_id: story_id,
+                    timeEstimate: data[id + '_time'],
+                    user_id: data[id + '_member']
+                });
+
+                await cur_task.save();
+                console.log("update task " + id);
+            }
+
+            // delete
+            else {
+                await cur_task.destroy();
+                console.log("destroy task " + id);
+            }
+
+            // check for new tasks
+            if (data.NEW_title) {
+                for (let i = 0; i < data.NEW_title.length; i++) {
+                    if (data.NEW_title[i] === "")
+                        continue;
+                    if (data.NEW_time[i] === "")
+                        data.NEW_time[i] = 0;
+
+                    const task = Task.build({
+                        name: data.NEW_title[i],
+                        isAccepted: false,
+                        story_id: story_id,
+                        timeEstimate: data.NEW_time[i],
+                        user_id: data.NEW_member[i]
+                    });
+
+                    await task.save();
+                    console.log("create task " + data.NEW_title[i]);
                 }
-            });
+            }
 
-            task.setAttributes({
-                name: data.name,
-                isAccepted: data.isAccepted,
-                story_id: data.story_id,
-                timeEstimate: data.timeEstimate,
-                user_id: data.user_id
-            });
-
-            await task.save();
         }
 
         res.redirect('/projects/' + project_id + '/view');
 
     } catch (e) {
-        console.log(data);
         console.log(e);
-        res.status(400).send({success: false});
-
+        res.redirect('/projects/' + project_id + '/view');
     }
 });
 
