@@ -269,27 +269,27 @@ router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async funct
                 console.log("destroy task " + id);
             }
 
-            // check for new tasks
-            if (data.NEW_title) {
-                for (let i = 0; i < data.NEW_title.length; i++) {
-                    if (data.NEW_title[i] === "")
-                        continue;
-                    if (data.NEW_time[i] === "")
-                        data.NEW_time[i] = 0;
+        }
 
-                    const task = Task.build({
-                        name: data.NEW_title[i],
-                        isAccepted: false,
-                        story_id: story_id,
-                        timeEstimate: data.NEW_time[i],
-                        user_id: data.NEW_member[i]
-                    });
+        // check for new tasks
+        if (data.NEW_title) {
+            for (let i = 0; i < data.NEW_title.length; i++) {
+                if (data.NEW_title[i] === "")
+                    continue;
+                if (data.NEW_time[i] === "")
+                    data.NEW_time[i] = 0;
 
-                    await task.save();
-                    console.log("create task " + data.NEW_title[i]);
-                }
+                const task = Task.build({
+                    name: data.NEW_title[i],
+                    isAccepted: false,
+                    story_id: story_id,
+                    timeEstimate: data.NEW_time[i],
+                    user_id: data.NEW_member[i]
+                });
+
+                await task.save();
+                console.log("create task " + data.NEW_title[i]);
             }
-
         }
 
         res.redirect('/projects/' + project_id + '/view');
