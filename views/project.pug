@@ -41,6 +41,39 @@ block content
                         br
                         p.mb-0.font-italic #{project.description} <br/>
 
+
+
+                        if stories.length
+                            hr
+                            h4(id="storiesDeck_s") Sprint backlog
+
+                            h3 Not assigned
+                            ul
+                                each story in stories
+                                    each task in story.Tasks
+                                        if task.status == 'Not assigned'
+                                            li #{task.name} - #{ task.timeEstimate }h
+                            h3 Assigned
+                            ul
+                                each story in stories
+                                    each task in story.Tasks
+                                        if task.status == 'Assigned'
+                                            li #{task.name} - #{ task.timeEstimate }h
+                            h3 Active
+                            ul
+                                each story in stories
+                                    each task in story.Tasks
+                                        if task.status == 'Active'
+                                            li #{task.name} - #{ task.timeEstimate }h
+                            h3 Done
+                            ul
+                            each story in stories
+                                each task in story.Tasks
+                                    if task.status == 'Done'
+                                        li #{task.name} - #{ task.timeEstimate }h
+
+
+
                         hr
                         h4(id="storiesDeck") Backlog
                         br
