@@ -72,7 +72,10 @@ block content
                                                                 span.pl-3
                                                                 select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
                                                                     each member in project.ProjectMembers
-                                                                        option(value=member.id) #{member.name}
+                                                                        if member.id === task.user_id
+                                                                            option(value=member.id selected) #{member.name}
+                                                                        else
+                                                                            option(value=member.id) #{member.name}
                                                                 span.ml-5
                                                                 input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox').form-check-input
                                                                 label.form-check-label Accept
