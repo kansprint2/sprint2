@@ -73,12 +73,9 @@ block content
                                                                 select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
                                                                     option(value='') #{'Not assigned'}
                                                                     each member in project.ProjectMembers
-                                                                        if member.id === task.user_id
-                                                                            option(value=member.id selected) #{member.name}
-                                                                        else
-                                                                            option(value=member.id) #{member.name}
+                                                                        option(value=member.id selected=member.id==task.user_id) #{member.name}
                                                                 span.ml-5
-                                                                input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox').form-check-input
+                                                                input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox' disabled=uid!==task.user_id).form-check-input
                                                                 label.form-check-label Accept
                                                                 span.ml-5
                                                                 a.btn.btn-danger.rm-task-btn Remove
@@ -97,7 +94,7 @@ block content
                                                             each member in project.ProjectMembers
                                                                 option(value=member.id) #{member.name}
                                                         span.ml-5
-                                                        input(name=('NEW_' + 'accept') type='checkbox').form-check-input
+                                                        input(name=('NEW_' + 'accept') type='checkbox' disabled=1).form-check-input
                                                         label.form-check-label Accept
                                                         span.ml-5
                                                         a.btn.btn-danger.rm-task-btn Remove
