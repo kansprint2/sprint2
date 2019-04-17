@@ -256,7 +256,7 @@ router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async funct
                     isAccepted: data[id + '_accept'] || false,
                     story_id: story_id,
                     timeEstimate: data[id + '_time'],
-                    user_id: data[id + '_member']
+                    user_id: data[id + '_member'] || null
                 });
 
                 await cur_task.save();
@@ -284,7 +284,7 @@ router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async funct
                     isAccepted: false,
                     story_id: story_id,
                     timeEstimate: data.NEW_time[i],
-                    user_id: data.NEW_member[i]
+                    user_id: data.NEW_member[i] || null
                 });
 
                 await task.save();

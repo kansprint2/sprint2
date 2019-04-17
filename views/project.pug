@@ -71,6 +71,7 @@ block content
                                                                 span &#128336;
                                                                 span.pl-3
                                                                 select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;').form-control
+                                                                    option(value='') #{'Not assigned'}
                                                                     each member in project.ProjectMembers
                                                                         if member.id === task.user_id
                                                                             option(value=member.id selected) #{member.name}
@@ -92,6 +93,7 @@ block content
                                                         span &#128336;
                                                         span.pl-3
                                                         select(name=('NEW_' + 'member') style='display: inline-block; width: 200px;').form-control
+                                                            option(value='') #{'Not assigned'}
                                                             each member in project.ProjectMembers
                                                                 option(value=member.id) #{member.name}
                                                         span.ml-5
