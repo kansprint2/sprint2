@@ -95,8 +95,9 @@ router.post('/:id/time/:story_id', ProjectHelper.isSMorPM, async function(req, r
     let activeSprintId = await SprintsHelper.currentActiveSprint(story.project_id);
     let activeSprint = await SprintsHelper.currentActiveSprintAll(story.project_id);
 
-    let time = req.body.time;
-    if (time.endsWith('h')) {
+    let time = req.body.time || '0';
+    console.log(req.body.time)
+    /*if (time.endsWith('h')) {
         time = time.slice(0, time.length - 1);
         time = +time;
     }
@@ -105,11 +106,11 @@ router.post('/:id/time/:story_id', ProjectHelper.isSMorPM, async function(req, r
         time = time.slice(0, time.length - 1);
         time = +time;
         time *= 8;
-    }
+    }*/
 
     // Set new attributes
     story.setAttributes({
-        timeEstimate: time
+        timeEstimate: +time
     });
     await story.save();
 
@@ -256,7 +257,8 @@ router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async funct
                     isAccepted: data[id + '_accept'] || false,
                     story_id: story_id,
                     timeEstimate: data[id + '_time'],
-                    user_id: data[id + '_member'] || null
+                    user_id: data[id + '_member'] || null,
+                    status: (+data[id + '_time'] != 0) ? (data[id + '_accept'] ? 'Assigned' : data[id+'_status']) : 'Done'
                 });
 
                 await cur_task.save();
@@ -284,7 +286,8 @@ router.post('/:id/tasks/:story_id/', ProjectHelper.canAccessProject, async funct
                     isAccepted: false,
                     story_id: story_id,
                     timeEstimate: data.NEW_time[i],
-                    user_id: data.NEW_member[i] || null
+                    user_id: data.NEW_member[i] || null,
+                    status: data.NEW_status[i]
                 });
 
                 await task.save();

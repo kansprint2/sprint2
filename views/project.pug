@@ -53,7 +53,7 @@ block content
                             // RENDER TASKS
                             each story in stories
                                 div.tasks-box(id='task-box-' + story.id)
-                                    p.mb-2 #{story.name}
+                                    h3.mb-2 #{story.name}
                                     form(method='POST' action=('/projects/'+ project.id + '/tasks/' + story.id))
                                         div.row
                                             div.col
@@ -67,24 +67,38 @@ block content
                                                                 span.pl-3
                                                                 span Time estimate
                                                                 span.pl-1
-                                                                input(name=(task.id + '_' + 'time') value=task.timeEstimate type='number' style='width: 60px' disabled=project.product_owner==uid)
+                                                                input(name=(task.id + '_' + 'time') value=task.timeEstimate type='number' min=0 style='width: 60px' disabled=project.product_owner==uid)
                                                                 span &#128336;
                                                                 span.pl-3
-                                                                select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;' disabled=project.product_owner==uid).form-control
+                                                                select(name=(task.id + '_' + 'member') style='display: inline-block; width: 200px;' readonly=(project.product_owner==uid || task.isAccepted)).form-control
                                                                     option(value='') #{'Not assigned'}
                                                                     each member in project.ProjectMembers
                                                                         option(value=member.id selected=member.id==task.user_id) #{member.name}
-                                                                select(name=(task.id + '_' + 'status') style='display: inline-block; width: 200px;' disabled=project.product_owner==uid).form-control
-                                                                    option(value='') #{'Not assigned'}
-                                                                    option(value='') #{'Assigned'}
-                                                                    option(value='') #{'Active'}
-                                                                    option(value='') #{'Done'}
+                                                                if project.product_owner==uid || !task.isAccepted
+                                                                    select(name=(task.id + '_' + 'status') style='display: inline-block; width: 200px;' hidden=(project.product_owner==uid || !task.isAccepted)).form-control
+                                                                        option(value='Not assigned' selected='Not assigned'==task.status) Not assigned
+                                                                        option(value='Assigned' selected='Assigned'==task.status) Assigned
+                                                                        option(value='Active' selected='Active'==task.status) Active
+                                                                        option(value='Done' selected='Done'==task.status) Done
+                                                                    select(name=(task.id + '_' + 'fake') style='display: inline-block; width: 200px;' disabled=(project.product_owner==uid || !task.isAccepted)).form-control
+                                                                        option(value='Not assigned' selected='Not assigned'==task.status) Not assigned
+                                                                        option(value='Assigned' selected='Assigned'==task.status) Assigned
+                                                                        option(value='Active' selected='Active'==task.status) Active
+                                                                        option(value='Done' selected='Done'==task.status) Done
+                                                                else
+                                                                    select(name=(task.id + '_' + 'status') style='display: inline-block; width: 200px;').form-control
+                                                                        if !task.isAccepted
+                                                                            option(value='Not assigned' selected='Not assigned'==task.status) Not assigned
+                                                                        option(value='Assigned' selected='Assigned'==task.status) Assigned
+                                                                        option(value='Active' selected='Active'==task.status) Active
+                                                                        option(value='Done' selected='Done'==task.status) Done
                                                                 span.ml-5
-                                                                input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox' hidden=uid!==task.user_id disabled=project.product_owner==uid).form-check-input
+                                                                input(name=(task.id + '_' + 'accept') checked=task.isAccepted type='checkbox' hidden=uid!==task.user_id readonly=project.product_owner==uid).form-check-input
                                                                 if selected=uid==task.user_id
                                                                     label.form-check-label Accept
                                                                 span.ml-5
-                                                                a.btn.btn-danger.rm-task-btn(disabled=task.isAccepted==1) Remove
+                                                                if project.product_owner!=uid && !task.isAccepted
+                                                                    a.btn.btn-danger.rm-task-btn Remove
                                                     div.new-task
                                                         span Task description
                                                         span.pl-1
@@ -92,23 +106,25 @@ block content
                                                         span.pl-3
                                                         span Time estimate
                                                         span.pl-1
-                                                        input(name=('NEW_' + 'time')  type='number' style='width: 60px')
+                                                        input(name=('NEW_' + 'time')  type='number' min=0 style='width: 60px')
                                                         span &#128336;
                                                         span.pl-3
                                                         select(name=('NEW_' + 'member') style='display: inline-block; width: 200px;').form-control
                                                             option(value='') #{'Not assigned'}
                                                             each member in project.ProjectMembers
                                                                 option(value=member.id) #{member.name}
-                                                        select(name=(task.id + '_' + 'status') style='display: inline-block; width: 200px;' hidden=1 disabled=project.product_owner==uid).form-control
-                                                                    option(value='' selected=1) #{'Not assigned'}
-                                                                    option(value='') #{'Assigned'}
-                                                                    option(value='') #{'Active'}
-                                                                    option(value='') #{'Done'}
+                                                        select(name=('NEW_' + 'status') style='display: inline-block; width: 200px;' hidden=1 readonly=project.product_owner==uid).form-control
+                                                                    option(value='Not assigned' selected=1)
+                                                                    option(value='Assigned')
+                                                                    option(value='Active')
+                                                                    option(value='Done')
                                                         span.ml-5
                                                         input(name=('NEW_' + 'accept') type='checkbox' hidden=1).form-check-input
                                                         span.ml-5
-                                                        a.btn.btn-danger.rm-task-btn Remove
-                                                    a.btn.btn-secondary.add-task-btn.text-right Add new task
+                                                        if project.product_owner!=uid
+                                                            a.btn.btn-danger.rm-task-btn Remove
+                                                    if project.product_owner!=uid
+                                                        a.btn.btn-secondary.add-task-btn.text-right.mt-3 Add new task
                                         br
                                         div.text-right
                                             a.btn.btn-secondary.cancel-tasks.mr-2 Cancel
@@ -143,7 +159,8 @@ block content
                                                             br
                                                             small Business value: #{story.businessValue}
                                                             br
-                                                            button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
+                                                            if false
+                                                                button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
                                                             br
                                                             if project.scrum_master == uid || project.product_owner == uid
                                                                 div.buttons.margin-top20
@@ -210,7 +227,7 @@ block content
                                                             button.btn.btn-success.float-right(onclick='showTasks(' + JSON.stringify(story) + ')') View tasks
                                                             br
                                                             br
-                                                            if true
+                                                            if false
                                                                 form(method='GET' action=('/projects/' + project.id + '/deactivate/' + story.id))
                                                                     input(type='hidden' value=story.id)
                                                                     button.btn.btn-danger &#9669; Remove from active sprint

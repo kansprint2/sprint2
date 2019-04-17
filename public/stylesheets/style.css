@@ -96,9 +96,9 @@ nav {
 
 
 .tasks-box {
-  background: #e6e6e6;
+  background: white;
   position: fixed;
-  bottom: 3em;
+  
   left: 3em;
   right: 3em;
   top: 3em;
@@ -106,6 +106,9 @@ nav {
   z-index: 9999999999;
   box-shadow: #0c0c0c 0 0 40px;
   overflow: auto;
+
+  border-radius: 4px;
+  border: solid 1px gray;
 }
 
 .new-task {
