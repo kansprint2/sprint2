@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
             field: 'updatedat',
             type: DataTypes.DATE,
         },
+        status: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     },
     {
         indexes: [
